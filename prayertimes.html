@@ -92,7 +92,7 @@
   </div>
 
   <script>
-  function getPrayerTimes(latitude, longitude) {
+function getPrayerTimes(latitude, longitude) {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
@@ -115,7 +115,7 @@
           const prayerName = document.createElement('td');
           const prayerTime = document.createElement('td');
           prayerName.innerText = prayer;
-          prayerTime.textContent = prayerTimes[prayer];
+          prayerTime.innerHTML = `${prayerTimes[prayer]}`;
           row.appendChild(prayerName);
           row.appendChild(prayerTime);
           table.appendChild(row);
