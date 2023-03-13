@@ -98,13 +98,9 @@
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
   const apiUrl = `https://api.aladhan.com/v1/timings/${day}-${month}-${year}?latitude=${latitude}&longitude=${longitude}&method=2`;
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-  const day = ('0' + currentDate.getDate()).slice(-2);
   const url = `${apiUrl}&date=${day}-${month}-${year}`;
   
-   fetch(apiUrl)
+   fetch(url)
     .then(response => response.json())
     .then(data => {
       const prayerTimes = data.data.timings;
@@ -119,7 +115,7 @@
           const prayerName = document.createElement('td');
           const prayerTime = document.createElement('td');
           prayerName.innerText = prayer;
-          prayerTime.innerHTML = `${prayerTimes[prayer]}`;
+          prayerTime.textContent = prayerTimes[prayer];
           row.appendChild(prayerName);
           row.appendChild(prayerTime);
           table.appendChild(row);
@@ -130,24 +126,5 @@
       widget.appendChild(table);
     });
 }
-
-function getPosition() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        getPrayerTimes(latitude, longitude);
-      },
-      error => {
-        console.error(`An error occurred: ${error.message}`);
-      }
-    );
-  } else {
-    console.error("Geolocation is not supported by this browser.");
-  }
-}
-
-getPosition();
 setInterval(getPosition, 24 * 60 * 60 * 1000); // Run every 24 hours
 </script>
