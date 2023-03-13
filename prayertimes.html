@@ -54,6 +54,19 @@
       color: #009688;
       font-weight: 400;
     }
+    @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #222;
+      color: #fff;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    body {
+      background-color: #fff;
+      color: #222;
+    }
+  }
   </style>
 </head>
 <body>
@@ -125,9 +138,28 @@ function getPrayerTimes() {
 
       widget.innerHTML = '';
       widget.appendChild(table);
+
+      // Check for dark mode preference
+      const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // Apply dark mode styles if preference is set to dark mode
+      if (prefersDarkMode) {
+        document.body.style.backgroundColor = '#333';
+        widget.style.color = '#fff';
+        widget.style.backgroundColor = '#444';
+        widget.style.borderColor = '#555';
+        const rows = document.querySelectorAll('#prayer-widget tr');
+        rows.forEach(row => {
+          row.style.borderColor = '#555';
+        });
+        const nextPrayer = document.querySelector('.next-prayer');
+        if (nextPrayer) {
+          nextPrayer.style.color = '#0f0';
+        }
+      }
     });
 }
 
 getPrayerTimes();
-setInterval(getPrayerTimes, 24 * 60 * 60 * 1000); // Run every 24 hours
+
 </script>
