@@ -1,85 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ramadan Prayer and Fasting Times</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      margin: 20px auto;
-    }
-    th, td {
-      border: 1px solid black;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<title>Islamic Prayer Time Widget</title>
+	<style>
+		body {
+			font-family: 'Roboto Mono', monospace;
+			text-align: center;
+			background-color: #f5f5f5;
+		}
+		h1 {
+			font-size: 48px;
+			margin-top: 50px;
+			margin-bottom: 20px;
+		}
+		p {
+			font-size: 24px;
+			margin-top: 0px;
+			margin-bottom: 10px;
+		}
+	</style>
+	<script>
+		window.onload = function() {
+			var xhr = new XMLHttpRequest();
+			var method = 'GET';
+			var url = 'https://api.aladhan.com/v1/timingsByCity?city=CITY_NAME&country=COUNTRY_NAME&method=8';
+			var async = true;
+
+			xhr.open(method, url, async);
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState === 4 && xhr.status === 200) {
+					var data = JSON.parse(xhr.responseText);
+					displayPrayerTimes(data.data.timings);
+				}
+			};
+			xhr.send();
+
+			function displayPrayerTimes(timings) {
+				document.getElementById('fajr').innerHTML = 'Fajr: ' + timings.Fajr;
+				document.getElementById('dhuhr').innerHTML = 'Dhuhr: ' + timings.Dhuhr;
+				document.getElementById('asr').innerHTML = 'Asr: ' + timings.Asr;
+				document.getElementById('maghrib').innerHTML = 'Maghrib: ' + timings.Maghrib;
+				document.getElementById('isha').innerHTML = 'Isha: ' + timings.Isha;
+			}
+		};
+	</script>
 </head>
 <body>
-  <h1>Ramadan Prayer and Fasting Times</h1>
-  <p>For Essex, Maryland, USA</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Day</th>
-        <th>Date</th>
-        <th>Fajr</th>
-        <th>Sunrise</th>
-        <th>Dhuhr</th>
-        <th>Asr</th>
-        <th>Maghrib</th>
-        <th>Isha</th>
-        <th>Fasting Start</th>
-        <th>Fasting End</th>
-      </tr>
-    </thead>
-    <tbody id="prayer-times">
-      <!-- The prayer times will be added here by JavaScript -->
-    </tbody>
-  </table>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/praytimes@2.3.0/dist/adhan.js"></script>
-  <script>
-    // Set the latitude and longitude for Essex, Maryland, USA
-    const latitude = 39.3098;
-    const longitude = -76.4534;
-
-    // Set the date for the first day of Ramadan (in the format of 'YYYY-MM-DD')
-    const startDate = '2023-04-02';
-
-    // Calculate the prayer and fasting times for the entire month of Ramadan
-    const prayerTimes = Array.from({ length: 30 }, (_, i) => {
-      const date = moment(startDate).add(i, 'days').toDate();
-      const prayerTimesObject = new adhan.PrayerTimes(
-        date,
-        latitude,
-        longitude,
-        {method: adhan.CalculationMethod.NorthAmerica},
-        {adjustments: {asr: 'Standard'}},
-      );
-      return Object.values(prayerTimesObject);
-    });
-
-    // Display the prayer and fasting times for each day of Ramadan
-    const prayerTimesTable = document.getElementById('prayer-times');
-    for (let i = 0; i < 30; i++) {
-      const date = moment(startDate).add(i, 'days').format('M/D');
-      const tr = document.createElement('tr');
-      const tdDay = document.createElement('td');
-      const tdDate = document.createElement('td');
-      const tdFajr = document.createElement('td');
-      const tdSunrise = document.createElement('td');
-      const tdDhuhr = document.createElement('td');
-      const tdAsr = document.createElement('td');
-      const tdMaghrib = document.createElement('td');
-      const tdIsha = document.createElement('td');
-      const tdFastingStart = document.createElement('td');
-      const tdFastingEnd = document.createElement('td');
-
-      tdDay.textContent = i + 1;
-      tdDate.textContent = date;
-      tdFajr.textContent = moment(prayerTimes[i][0]).format('h:mm A');
-      tdSunrise.textContent = moment(prayerTimes[i][1]).format
+	<h1>Prayer Times</h1>
+	<p id="fajr"></p>
+	<p id="dhuhr"></p>
+	<p id="asr"></p>
+	<p id="maghrib"></p>
+	<p id="isha"></p>
+</body>
+</html>
