@@ -9,11 +9,14 @@
 			text-align: center;
 			background-color: #f5f5f5;
 		}
-		
-		p{
-			font-size: 16px;
-			margin-top: 0px;
-			margin-bottom: 10px;
+		table {
+			margin: 0 auto;
+			border-collapse: collapse;
+			border: 2px solid black;
+		}
+		th, td {
+			padding: 10px;
+			border: 1px solid black;
 		}
 	</style>
 	<script>
@@ -32,13 +35,20 @@
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState === 4 && xhr.status === 200) {
 					var data = JSON.parse(xhr.responseText);
-					document.getElementById('imsak').innerHTML = 'Imsak: ' + data.data.timings.Imsak;
-					document.getElementById('fajr').innerHTML = 'Fajr: ' + data.data.timings.Fajr;
-					document.getElementById('dhuhr').innerHTML = 'Dhuhr: ' + data.data.timings.Dhuhr;
-					document.getElementById('asr').innerHTML = 'Asr: ' + data.data.timings.Asr;
-					document.getElementById('maghrib').innerHTML = 'Maghrib: ' + data.data.timings.Maghrib;
-					document.getElementById('sunset').innerHTML = 'Sunset: ' + data.data.timings.Sunset;
-					document.getElementById('isha').innerHTML = 'Isha: ' + data.data.timings.Isha;
+					document.getElementById('imsak_today').innerHTML = data.data.timings.Imsak;
+					document.getElementById('fajr_today').innerHTML = data.data.timings.Fajr;
+					document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
+					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
+					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
+					document.getElementById('sunset_today').innerHTML = data.data.timings.Sunset;
+					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
+					document.getElementById('imsak_tomorrow').innerHTML = data.data.next_day_data.timings.Imsak;
+					document.getElementById('fajr_tomorrow').innerHTML = data.data.next_day_data.timings.Fajr;
+					document.getElementById('dhuhr_tomorrow').innerHTML = data.data.next_day_data.timings.Dhuhr;
+					document.getElementById('asr_tomorrow').innerHTML = data.data.next_day_data.timings.Asr;
+					document.getElementById('maghrib_tomorrow').innerHTML = data.data.next_day_data.timings.Maghrib;
+					document.getElementById('sunset_tomorrow').innerHTML = data.data.next_day_data.timings.Sunset;
+					document.getElementById('isha_tomorrow').innerHTML = data.data.next_day_data.timings.Isha;
 				}
 			};
 			xhr.send();
@@ -47,12 +57,42 @@
 </head>
 <body>
 	<h1>Prayer Times</h1>
-	<p id="imsak"></p>
-	<p id="fajr"></p>
-	<p id="dhuhr"></p>
-	<p id="asr"></p>
-	<p id="maghrib"></p>
-	<p id="sunset"></p>
-	<p id="isha"></p>
+	<table>
+		<tr>
+			<th>Prayer</th>
+			<th>Time</th>
+			<th>Tomorrow</th>
+		</tr>
+		<tr>
+			<td>Imsak</td>
+			<td id="imsak_today"></td>
+			<td id="imsak_tomorrow"></td>
+		</tr>
+		<tr>
+			<td>Fajr</td>
+			<td id="fajr_today"></td>
+			<td id="fajr_tomorrow"></td>
+		</tr>
+		<tr>
+			<td>Dhuhr</td>
+			<td id="dhuhr_today"></td>
+			<td id="dhuhr_tomorrow"></td>
+		</tr>
+		<tr>
+			<td>Asr</td>
+			<td id="asr_today"></td>
+			<td id="asr_tomorrow"></td>
+		</tr>
+		<tr>
+			<td>Maghrib</td>
+			<td id="maghrib_today"></td>
+			<td id="maghrib_tomorrow"></td>
+		</tr>
+		<tr>
+			<td>Isha</td>
+			<td id="isha_today"></td>
+			<td id="isha_tomorrow"></td>
+		</tr>
+	</table>
 </body>
 </html>
