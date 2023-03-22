@@ -6,13 +6,11 @@
 	<style>
 		body {
 			font-family: 'Roboto Mono', monospace;
-			text-align: center;
-			background-color: #f5f5f5;
+			text-align: left;
 		}
 		table {
 			margin: 0 auto;
 			border-collapse: collapse;
-			border: 2px solid black;
 		}
 		th, td {
 			padding: 10px;
@@ -40,14 +38,12 @@
 					document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
 					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
 					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
-					document.getElementById('sunset_today').innerHTML = data.data.timings.Sunset;
 					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
 					document.getElementById('imsak_tomorrow').innerHTML = data.data.next_day_data.timings.Imsak;
 					document.getElementById('fajr_tomorrow').innerHTML = data.data.next_day_data.timings.Fajr;
 					document.getElementById('dhuhr_tomorrow').innerHTML = data.data.next_day_data.timings.Dhuhr;
 					document.getElementById('asr_tomorrow').innerHTML = data.data.next_day_data.timings.Asr;
 					document.getElementById('maghrib_tomorrow').innerHTML = data.data.next_day_data.timings.Maghrib;
-					document.getElementById('sunset_tomorrow').innerHTML = data.data.next_day_data.timings.Sunset;
 					document.getElementById('isha_tomorrow').innerHTML = data.data.next_day_data.timings.Isha;
 				}
 			};
