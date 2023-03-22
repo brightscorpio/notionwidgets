@@ -45,8 +45,6 @@
 						nextPrayer = "Maghrib";
 					} else if(now > new Date(data.data.timings.Maghrib) && now < new Date(data.data.timings.Isha)) {
 						nextPrayer = "Isha";
-					} else {
-						nextPrayer = "Fajr";
 					}
 					document.getElementById(nextPrayer.toLowerCase() + '_today').style.color = 'pink';
 				}
