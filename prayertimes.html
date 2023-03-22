@@ -13,12 +13,7 @@
 		}
 	</style>
 	<script>
-	window.onload = function() {
-			displayPrayerTimes();
-			setInterval(displayPrayerTimes, 1000);
-		};
-		
-		function displayPrayerTimes() {
+	function displayPrayerTimes() {
     var xhr = new XMLHttpRequest();
     var method = 'GET';
     var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
