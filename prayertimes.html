@@ -120,7 +120,7 @@ function getPrayerTimes() {
       const widget = document.getElementById('prayer-widget');
       const table = document.createElement('table');
 
-      const excludedPrayers = ['Firstthird', 'Lastthird', 'Imsak', 'Sunset', 'Sunrise'];
+      const excludedPrayers = ['Firstthird', 'Lastthird'];
      
       Object.keys(prayerTimes).forEach(prayer => {
         if (!excludedPrayers.includes(prayer)) {
