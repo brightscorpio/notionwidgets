@@ -11,10 +11,6 @@
 		th, td {
 			padding: 10px;
 		}
-		.current-prayer {
-			color: pink;
-		}
-	</style>
 	<script>
 	window.onload = function() {
 			displayPrayerTimes();
@@ -37,31 +33,6 @@
 					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
 					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
 					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
-
-					var now = new Date();
-					var currentPrayer;
-					if(now > new Date(data.data.timings.Fajr) && now < new Date(data.data.timings.Dhuhr)) {
-						currentPrayer = "fajr_today";
-					} else if(now > new Date(data.data.timings.Dhuhr) && now < new Date(data.data.timings.Asr)) {
-						currentPrayer = "dhuhr_today";
-					} else if(now > new Date(data.data.timings.Asr) && now < new Date(data.data.timings.Maghrib)) {
-						currentPrayer = "asr_today";
-					} else if(now > new Date(data.data.timings.Maghrib) && now < new Date(data.data.timings.Isha)) {
-						currentPrayer = "maghrib_today";
-					} else {
-						currentPrayer = "isha_today";
-					}
-
-					// Reset all prayer times to default color
-					document.getElementById('imsak_today').classList.remove("current-prayer");
-					document.getElementById('fajr_today').classList.remove("current-prayer");
-					document.getElementById('dhuhr_today').classList.remove("current-prayer");
-					document.getElementById('asr_today').classList.remove("current-prayer");
-					document.getElementById('maghrib_today').classList.remove("current-prayer");
-					document.getElementById('isha_today').classList.remove("current-prayer");
-
-					// Set the color of the current prayer time to pink
-					document.getElementById(currentPrayer).classList.add("current-prayer");
 				}
 
 			};
