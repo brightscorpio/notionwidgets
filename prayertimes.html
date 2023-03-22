@@ -1,87 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Prayer Times Widget</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-	<style>
-		body {
-			font-family: 'Roboto Mono', monospace;
-			background-color: #f5f5f5;
-			color: #333;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
-		}
-
-		.container {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			text-align: center;
-		}
-
-		.prayer-time {
-			font-size: 4rem;
-			font-weight: bold;
-			margin: 0;
-			padding: 0;
-			color: #333;
-		}
-
-		.next-prayer {
-			color: pink;
-		}
-
-		.prayer-name {
-			font-size: 2rem;
-			margin: 0;
-			padding: 0;
-			color: #333;
-		}
-	</style>
+  <title>Ramadan Prayer and Fasting Times</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 <body>
-	<div class="container">
-		<h1 class="prayer-time"></h1>
-		<p class="prayer-name"></p>
-	</div>
+  <h1>Ramadan Prayer and Fasting Times</h1>
+  <p>For Essex, Maryland, USA</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Date</th>
+        <th>Fajr</th>
+        <th>Sunrise</th>
+        <th>Dhuhr</th>
+        <th>Asr</th>
+        <th>Maghrib</th>
+        <th>Isha</th>
+        <th>Fasting Start</th>
+        <th>Fasting End</th>
+      </tr>
+    </thead>
+    <tbody id="prayer-times">
+      <!-- The prayer times will be added here by JavaScript -->
+    </tbody>
+  </table>
 
-	<script src="https://api.aladhan.com/v1/timingsByCity?city=Essex&state=MD&country=United%20States&method=2"></script>
-	<script>
-		const prayerTimeElement = document.querySelector('.prayer-time');
-		const prayerNameElement = document.querySelector('.prayer-name');
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/praytimes@2.3.0/dist/adhan.js"></script>
+  <script>
+    // Set the latitude and longitude for Essex, Maryland, USA
+    const latitude = 39.3098;
+    const longitude = -76.4534;
 
-		// Get current time
-		const now = new Date();
+    // Set the date for the first day of Ramadan (in the format of 'YYYY-MM-DD')
+    const startDate = '2023-04-02';
 
-		// Parse prayer times from API response
-		const prayerTimes = JSON.parse(prayerTime).data.timings;
+    // Calculate the prayer and fasting times for the entire month of Ramadan
+    const prayerTimes = Array.from({ length: 30 }, (_, i) => {
+      const date = moment(startDate).add(i, 'days').toDate();
+      const prayerTimesObject = new adhan.PrayerTimes(
+        date,
+        latitude,
+        longitude,
+        {method: adhan.CalculationMethod.NorthAmerica},
+        {adjustments: {asr: 'Standard'}},
+      );
+      return Object.values(prayerTimesObject);
+    });
 
-		// Get prayer times for today
-		const formattedDate = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
-		const todayPrayerTimes = prayerTimes[formattedDate];
+    // Display the prayer and fasting times for each day of Ramadan
+    const prayerTimesTable = document.getElementById('prayer-times');
+    for (let i = 0; i < 30; i++) {
+      const date = moment(startDate).add(i, 'days').format('M/D');
+      const tr = document.createElement('tr');
+      const tdDay = document.createElement('td');
+      const tdDate = document.createElement('td');
+      const tdFajr = document.createElement('td');
+      const tdSunrise = document.createElement('td');
+      const tdDhuhr = document.createElement('td');
+      const tdAsr = document.createElement('td');
+      const tdMaghrib = document.createElement('td');
+      const tdIsha = document.createElement('td');
+      const tdFastingStart = document.createElement('td');
+      const tdFastingEnd = document.createElement('td');
 
-		// Find next prayer time
-		let nextPrayer = null;
-		for (let prayer in todayPrayerTimes) {
-			const prayerTime = new Date(`${formattedDate} ${todayPrayerTimes[prayer]}`);
-			if (prayerTime > now) {
-				nextPrayer = prayer;
-				break;
-			}
-		}
-
-		// Format and display next prayer time
-		if (nextPrayer) {
-			const nextPrayerTime = todayPrayerTimes[nextPrayer];
-			prayerTimeElement.textContent = nextPrayerTime;
-			prayerNameElement.textContent = nextPrayer;
-			prayerNameElement.classList.add('next-prayer');
-		} else {
-			prayerTimeElement.textContent = 'No prayer times remaining today.';
-		}
-	</script>
-</body>
-</html>
+      tdDay.textContent = i + 1;
+      tdDate.textContent = date;
+      tdFajr.textContent = moment(prayerTimes[i][0]).format('h:mm A');
+      tdSunrise.textContent = moment(prayerTimes[i][1]).format
