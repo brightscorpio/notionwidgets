@@ -34,12 +34,6 @@
 					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
 					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
 					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
-					document.getElementById('imsak_tomorrow').innerHTML = data.data.next_day_data.timings.Imsak;
-					document.getElementById('fajr_tomorrow').innerHTML = data.data.next_day_data.timings.Fajr;
-					document.getElementById('dhuhr_tomorrow').innerHTML = data.data.next_day_data.timings.Dhuhr;
-					document.getElementById('asr_tomorrow').innerHTML = data.data.next_day_data.timings.Asr;
-					document.getElementById('maghrib_tomorrow').innerHTML = data.data.next_day_data.timings.Maghrib;
-					document.getElementById('isha_tomorrow').innerHTML = data.data.next_day_data.timings.Isha;
 				}
 			};
 			xhr.send();
@@ -51,37 +45,36 @@
 		<tr>
 			<th>Prayer</th>
 			<th>Today</th>
-			<th>Tomorrow</th>
 		</tr>
 		<tr>
 			<td>Imsak</td>
 			<td id="imsak_today"></td>
-			<td id="imsak_tomorrow"></td>
+			<td><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/fasting.png?raw=true" width="18"></td>
 		</tr>
 		<tr>
 			<td>Fajr</td>
-			<td id="fajr_today"></td>
-			<td id="fajr_tomorrow"></td>
+			<td id="fajr_today"><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/praying.png?raw=true" width="118"></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td>Dhuhr</td>
 			<td id="dhuhr_today"></td>
-			<td id="dhuhr_tomorrow"></td>
+			<td><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/praying.png?raw=true" width="118"></td>
 		</tr>
 		<tr>
 			<td>Asr</td>
 			<td id="asr_today"></td>
-			<td id="asr_tomorrow"></td>
+			<td><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/praying.png?raw=true" width="118"></td>
 		</tr>
 		<tr>
 			<td>Maghrib</td>
 			<td id="maghrib_today"></td>
-			<td id="maghrib_tomorrow"></td>
+			<td><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/praying.png?raw=true" width="118"></td>
 		</tr>
 		<tr>
 			<td>Isha</td>
 			<td id="isha_today"></td>
-			<td id="isha_tomorrow"></td>
+			<td><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/praying.png?raw=true" width="118"></td>
 		</tr>
 	</table>
 </body>
