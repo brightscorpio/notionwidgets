@@ -14,46 +14,53 @@
 	</style>
 		<script>
 	window.onload = function() {
-			displayPrayerTimes();
-			setInterval(displayPrayerTimes, 1000);
-		};
-		
-		function displayPrayerTimes() {
-			var xhr = new XMLHttpRequest();
-			var method = 'GET';
-			var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
-			var async = true;
+    displayPrayerTimes();
+    setInterval(displayPrayerTimes, 1000);
+};
 
-			xhr.open(method, url, async);
-			xhr.onreadystatechange = function() {
-				if(xhr.readyState === 4 && xhr.status === 200) {
-					var data = JSON.parse(xhr.responseText);
-					document.getElementById('imsak_today').innerHTML = data.data.timings.Imsak;
-					document.getElementById('fajr_today').innerHTML = data.data.timings.Fajr;
-					document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
-					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
-					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
-					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
-					
-					// Get current time
-var currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+function displayPrayerTimes() {
+    var xhr = new XMLHttpRequest();
+    var method = 'GET';
+    var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
+    var async = true;
 
-// Get prayer time cells
-var prayerTimeCells = document.querySelectorAll('td[id$="_today"]');
+    xhr.open(method, url, async);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4 && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            document.getElementById('imsak_today').innerHTML = data.data.timings.Imsak;
+            document.getElementById('fajr_today').innerHTML = data.data.timings.Fajr;
+            document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
+            document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
+            document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
+            document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
 
-// Find next prayer time and highlight its cell
-for (var i = 0; i < prayerTimeCells.length; i++) {
-  var prayerTime = prayerTimeCells[i].innerHTML;
-  if (prayerTime > currentTime) {
-    prayerTimeCells[i].style.backgroundColor = "pink";
-    break;
-  }
+            // Get current time
+            var currentTime = new Date();
+            currentTime.setSeconds(0);
+            currentTime.setMilliseconds(0);
+
+            // Get prayer time cells
+            var prayerTimeCells = document.querySelectorAll('td[id$="_today"]');
+
+            // Find next prayer time and highlight its cell
+            for (var i = 0; i < prayerTimeCells.length; i++) {
+                var prayerTime = new Date();
+                var prayerTimeString = prayerTimeCells[i].innerHTML;
+                var prayerTimeParts = prayerTimeString.split(':');
+                prayerTime.setHours(parseInt(prayerTimeParts[0]));
+                prayerTime.setMinutes(parseInt(prayerTimeParts[1]));
+                prayerTime.setSeconds(0);
+                prayerTime.setMilliseconds(0);
+                if (prayerTime > currentTime) {
+                    prayerTimeCells[i].style.backgroundColor = "pink";
+                    break;
+                }
+            }
+        }
+    };
+    xhr.send();
 }
-				}
-
-			};
-			xhr.send();
-		}
 	</script>
 </head>
 <body>
