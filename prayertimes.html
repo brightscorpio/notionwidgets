@@ -73,15 +73,15 @@
     <h2>Prayer Times</h2>
     <table>
       <tr>
-        <td>Fajr</td>
+        <td><img src="https://static.thenounproject.com/png/5604670-200.png" style="width:50px;"> Fajr</td>
         <td id="fajr-time"></td>
       </tr>
       <tr>
         <td>Sunrise</td>
-        <td id="sunrise-time"></td>
+        <td id="sunrise-time"></d>
       </tr>
       <tr>
-        <td>Dhuhr</td>
+        <td><img src="https://static.thenounproject.com/png/5604670-200.png" style="width:50px;"> Dhuhr</td>
         <td id="dhuhr-time"></td>
       </tr>
       <tr>
@@ -120,7 +120,7 @@ function getPrayerTimes() {
       const widget = document.getElementById('prayer-widget');
       const table = document.createElement('table');
 
-      const excludedPrayers = ['Firstthird', 'Lastthird'];
+      const excludedPrayers = ['Firstthird', 'Lastthird', 'Sunrise'];
      
       Object.keys(prayerTimes).forEach(prayer => {
         if (!excludedPrayers.includes(prayer)) {
