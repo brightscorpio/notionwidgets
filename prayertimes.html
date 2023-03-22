@@ -119,7 +119,7 @@ function getPrayerTimes() {
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
   const url = `${apiUrl}&date=${day}-${month}-${year}`;
-  
+
   fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -127,24 +127,47 @@ function getPrayerTimes() {
       const widget = document.getElementById('prayer-widget');
       const table = document.createElement('table');
 
-      const excludedPrayers = ['Firstthird', 'Lastthird', 'Midnight', 'Sunrise'];
-     
-      Object.keys(prayerTimes).forEach(prayer => {
-        if (!excludedPrayers.includes(prayer)) {
-          const row = document.createElement('tr');
-          const prayerName = document.createElement('td');
-          const prayerTime = document.createElement('td');
-          prayerName.innerText = prayer;
-          prayerTime.innerHTML = `${prayerTimes[prayer]}`;
-          row.appendChild(prayerName);
-          row.appendChild(prayerTime);
-          table.appendChild(row);
-          const prayerDateTime = new Date(`${year}-${month}-${day}T${prayerTimes[prayer]}Z`);
-    if (prayerDateTime > currentDate && !nextPrayer) {
-      prayerTime.classList.add('next-prayer');
-      nextPrayer = prayerTime;
-    }
+      const prayerNames = Object.keys(prayerTimes);
+      const currentHour = currentDate.getHours();
+      const currentMinute = currentDate.getMinutes();
+      let currentPrayerIndex = -1;
+      let nextPrayerIndex = -1;
+
+      // Find the index of the current prayer and the next prayer
+      for (let i = 0; i < prayerNames.length; i++) {
+        const prayerTime = prayerTimes[prayerNames[i]];
+        const [prayerHour, prayerMinute] = prayerTime.split(':');
+        if (prayerHour > currentHour || (prayerHour == currentHour && prayerMinute > currentMinute)) {
+          nextPrayerIndex = i;
+          break;
+        } else {
+          currentPrayerIndex = i;
         }
+      }
+
+      // Filter the prayer times to show only the last prayer and the next 5 prayers
+      const excludedPrayers = ['Firstthird', 'Lastthird', 'Midnight', 'Sunrise'];
+      const prayerNamesToShow = prayerNames.filter(prayer => {
+        if (excludedPrayers.includes(prayer)) {
+          return false;
+        } else {
+          const prayerIndex = prayerNames.indexOf(prayer);
+          return prayerIndex >= currentPrayerIndex && prayerIndex <= nextPrayerIndex + 4;
+        }
+      });
+
+      prayerNamesToShow.forEach(prayer => {
+        const row = document.createElement('tr');
+        const prayerName = document.createElement('td');
+        const prayerTime = document.createElement('td');
+        prayerName.innerText = prayer;
+        prayerTime.innerHTML = `${prayerTimes[prayer]}`;
+        if (prayerNames.indexOf(prayer) == nextPrayerIndex) {
+          prayerName.classList.add('next-prayer');
+        }
+        row.appendChild(prayerName);
+        row.appendChild(prayerTime);
+        table.appendChild(row);
       });
 
       widget.innerHTML = '';
@@ -152,7 +175,7 @@ function getPrayerTimes() {
 
       // Check for dark mode preference
       const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
+
       // Apply dark mode styles if preference is set to dark mode
       if (prefersDarkMode) {
         document.body.style.backgroundColor = '#333';
@@ -171,6 +194,7 @@ function getPrayerTimes() {
     });
 }
 
-getPrayerTimes();
+// Update the prayer times every minute
+setInterval(getPrayerTimes, 60000);
 
 </script>
