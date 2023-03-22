@@ -34,21 +34,58 @@
 					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
 					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
 					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
+					<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Islamic Prayer Time Widget</title>
+	<style>
+		body {
+			font-family: 'Roboto Mono', monospace;
+			text-align: left;
+		}
+		th, td {
+			padding: 10px;
+		}
+	</style>
+	<script>
+	window.onload = function() {
+			displayPrayerTimes();
+			setInterval(displayPrayerTimes, 1000);
+		};
+		
+		function displayPrayerTimes() {
+			var xhr = new XMLHttpRequest();
+			var method = 'GET';
+			var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
+			var async = true;
+
+			xhr.open(method, url, async);
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState === 4 && xhr.status === 200) {
+					var data = JSON.parse(xhr.responseText);
+					document.getElementById('imsak_today').innerHTML = data.data.timings.Imsak;
+					document.getElementById('fajr_today').innerHTML = data.data.timings.Fajr;
+					document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
+					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
+					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
+					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
+
+					var now = new Date();
+					var nextPrayer;
+					if(now > new Date(data.data.timings.Fajr)) {
+						nextPrayer = "Dhuhr";
+					} else if(now > new Date(data.data.timings.Dhuhr)) {
+						nextPrayer = "Asr";
+					} else if(now > new Date(data.data.timings.Asr)) {
+						nextPrayer = "Maghrib";
+					} else if(now > new Date(data.data.timings.Maghrib)) {
+						nextPrayer = "Isha";
+					} else {
+						nextPrayer = "Fajr";
+					}
+					document.getElementById(nextPrayer.toLowerCase() + '_today').style.color = 'pink';
 				}
-				var now = new Date();
-var nextPrayer;
-if(now > new Date(data.data.timings.Fajr)) {
-	nextPrayer = "Fajr";
-} else if(now > new Date(data.data.timings.Dhuhr)) {
-	nextPrayer = "Dhuhr";
-} else if(now > new Date(data.data.timings.Asr)) {
-	nextPrayer = "Asr";
-} else if(now > new Date(data.data.timings.Maghrib)) {
-	nextPrayer = "Maghrib";
-} else {
-	nextPrayer = "Isha";
-}
-document.getElementById(nextPrayer.toLowerCase() + '_today').style.color = 'pink';
 
 			};
 			xhr.send();
