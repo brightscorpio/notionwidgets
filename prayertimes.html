@@ -10,14 +10,43 @@
 			background-color: #f5f5f5;
 		}
 		h1 {
-			font-size: 48px;
+			font-size: 25px;
 			margin-top: 50px;
 			margin-bottom: 20px;
 		}
 		p {
-			font-size: 24px;
+			font-size: 15px;
 			margin-top: 0px;
 			margin-bottom: 10px;
+		}
+		.prayer-icon {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-size: cover;
+			margin-right: 10px;
+			vertical-align: middle;
+		}
+		.prayer-icon.imsak {
+			background-image: url('https://raw.githubusercontent.com/brightscorpio/notionwidgets/main/pw_icons/fasting.png');
+		}
+		.prayer-icon.fajr {
+			background-image: url('https://raw.githubusercontent.com/brightscorpio/notionwidgets/main/pw_icons/praying.png');
+		}
+		.prayer-icon.dhuhr {
+			background-image: url('https://raw.githubusercontent.com/brightscorpio/notionwidgets/main/pw_icons/praying.png');
+		}
+		.prayer-icon.asr {
+			background-image: url('https://raw.githubusercontent.com/brightscorpio/notionwidgets/main/pw_icons/praying.png');
+		}
+		.prayer-icon.maghrib {
+			background-image: url('https://raw.githubusercontent.com/brightscorpio/notionwidgets/main/pw_icons/praying.png');
+		}
+		.prayer-icon.sunset {
+			background-image: url('https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/icons/maghrib.png');
+		}
+		.prayer-icon.isha {
+			background-image: url('https://raw.githubusercontent.com/brightscorpio/notionwidgets/main/pw_icons/praying.png');
 		}
 	</style>
 	<script>
@@ -29,24 +58,24 @@
 		function displayPrayerTimes() {
 			var xhr = new XMLHttpRequest();
 			var method = 'GET';
-			var url = 'https://api.aladhan.com/v1/timingsByCity?city=CITY_NAME&country=COUNTRY_NAME&method=8';
+			var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
 			var async = true;
 
 			xhr.open(method, url, async);
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState === 4 && xhr.status === 200) {
 					var data = JSON.parse(xhr.responseText);
-					document.getElementById('imsak').innerHTML = 'Imsak: ' + data.data.timings.Imsak;
-					document.getElementById('fajr').innerHTML = 'Fajr: ' + data.data.timings.Fajr;
-					document.getElementById('dhuhr').innerHTML = 'Dhuhr: ' + data.data.timings.Dhuhr;
-					document.getElementById('asr').innerHTML = 'Asr: ' + data.data.timings.Asr;
-					document.getElementById('maghrib').innerHTML = 'Maghrib: ' + data.data.timings.Maghrib;
-					document.getElementById('isha').innerHTML = 'Isha: ' + data.data.timings.Isha;
-				}
-			};
-			xhr.send();
-		}
-	</script>
+					document.getElementById('imsak').innerHTML = '<span class="prayer-icon imsak"></span>' + 'Imsak: ' + data.data.timings.Imsak;
+					document.getElementById('fajr').innerHTML = '<span class="prayer-icon fajr"></span>' + 'Fajr: ' + data.data.timings.Fajr;
+					document.getElementById('dhuhr').innerHTML = '<span class="prayer-icon dhuhr"></span>' + 'Dhuhr: ' + data.data.timings.Dhuhr;
+					document.getElementById('asr').innerHTML = '<span class="prayer-icon asr"></span>' + 'Asr: ' + data.data.timings.Asr;
+					document.getElementById('maghrib').innerHTML = '<span class="prayer-icon maghrib"></span>' + 'Maghrib: ' + data.data.timings.Maghrib;
+					document.getElementById('sunset').innerHTML = '<span class="prayer-icon sunset"></span>' + 'Sunset: ' + data.data.timings.Sunset;
+					document.getElementById('isha').innerHTML = '<span class="prayer-icon isha"></span>' + 'Isha: ' + data.data.timings.Isha;
+}
+};
+			  	xhr.send();
+  }
 </head>
 <body>
 	<h1>Prayer Times</h1>
@@ -55,6 +84,7 @@
 	<p id="dhuhr"></p>
 	<p id="asr"></p>
 	<p id="maghrib"></p>
+	<p id="sunset"></P>
 	<p id="isha"></p>
 </body>
 </html>
