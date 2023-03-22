@@ -33,6 +33,21 @@
 					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
 					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
 					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
+					
+					// Get current time
+var currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+// Get prayer time cells
+var prayerTimeCells = document.querySelectorAll('td[id$="_today"]');
+
+// Find next prayer time and highlight its cell
+for (var i = 0; i < prayerTimeCells.length; i++) {
+  var prayerTime = prayerTimeCells[i].innerHTML;
+  if (prayerTime > currentTime) {
+    prayerTimeCells[i].style.backgroundColor = "pink";
+    break;
+  }
+}
 				}
 
 			};
