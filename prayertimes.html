@@ -52,6 +52,11 @@
       color: #009688;
       font-weight: 400;
     }
+    
+    #prayer-widget td.next-prayer {
+  color: pink;
+}
+
     @media (prefers-color-scheme: dark) {
     body {
       background-color: #2F3438;
@@ -134,6 +139,11 @@ function getPrayerTimes() {
           row.appendChild(prayerName);
           row.appendChild(prayerTime);
           table.appendChild(row);
+          const prayerDateTime = new Date(`${year}-${month}-${day}T${prayerTimes[prayer]}Z`);
+    if (prayerDateTime > currentDate && !nextPrayer) {
+      prayerTime.classList.add('next-prayer');
+      nextPrayer = prayerTime;
+    }
         }
       });
 
