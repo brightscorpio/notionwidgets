@@ -6,7 +6,7 @@
 	<style>
 		body {
 			font-family: 'Roboto Mono', monospace;
-			text-align: left;
+			text-align: center;
 			background-color: #f5f5f5;
 		}
 		h1 {
@@ -22,40 +22,39 @@
 	</style>
 	<script>
 		window.onload = function() {
+			displayPrayerTimes();
+			setInterval(displayPrayerTimes, 1000);
+		};
+		
+		function displayPrayerTimes() {
 			var xhr = new XMLHttpRequest();
 			var method = 'GET';
-			var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=US&method=8';
+			var url = 'https://api.aladhan.com/v1/timingsByCity?city=CITY_NAME&country=COUNTRY_NAME&method=8';
 			var async = true;
 
 			xhr.open(method, url, async);
 			xhr.onreadystatechange = function() {
 				if(xhr.readyState === 4 && xhr.status === 200) {
 					var data = JSON.parse(xhr.responseText);
-					displayPrayerTimes(data.data.timings);
+					document.getElementById('imsak').innerHTML = 'Imsak: ' + data.data.timings.Imsak;
+					document.getElementById('fajr').innerHTML = 'Fajr: ' + data.data.timings.Fajr;
+					document.getElementById('dhuhr').innerHTML = 'Dhuhr: ' + data.data.timings.Dhuhr;
+					document.getElementById('asr').innerHTML = 'Asr: ' + data.data.timings.Asr;
+					document.getElementById('maghrib').innerHTML = 'Maghrib: ' + data.data.timings.Maghrib;
+					document.getElementById('isha').innerHTML = 'Isha: ' + data.data.timings.Isha;
 				}
 			};
 			xhr.send();
-
-			function displayPrayerTimes(timings) {
-				document.getElementById('imsak').innerHTML = 'Imsak: ' + timings.Imsak;
-				document.getElementById('fajr').innerHTML = 'Fajr: ' + timings.Fajr;
-				document.getElementById('dhuhr').innerHTML = 'Dhuhr: ' + timings.Dhuhr;
-				document.getElementById('asr').innerHTML = 'Asr: ' + timings.Asr;
-				document.getElementById('maghrib').innerHTML = 'Maghrib: ' + timings.Maghrib;
-				document.getElementById('iftar').innerHTML = 'Imsak: ' + timings.Iftar;
-				document.getElementById('isha').innerHTML = 'Isha: ' + timings.Isha;
-			}
-		};
+		}
 	</script>
 </head>
 <body>
 	<h1>Prayer Times</h1>
-	<p id="imsak"><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/fasting.png?raw=true" width="15"></p>
+	<p id="imsak"></p>
 	<p id="fajr"></p>
 	<p id="dhuhr"></p>
 	<p id="asr"></p>
 	<p id="maghrib"></p>
-	<p id="iftar"></p>
 	<p id="isha"></p>
 </body>
 </html>
