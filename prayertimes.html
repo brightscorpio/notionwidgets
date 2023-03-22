@@ -1,151 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-  <style>
-    #prayer-widget {
-      font-family: 'Roboto Mono', monospace;
-      max-width: 250px;
-      border-radius: 10px;
-      text-align: center;
-    }
+	<meta charset="UTF-8">
+	<title>Prayer Times Widget</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+	<style>
+		body {
+			font-family: 'Roboto Mono', monospace;
+			background-color: #f5f5f5;
+			color: #333;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
 
-    #prayer-widget h2 {
-      margin-top: 0;
-      font-size: 18px;
-      font-weight: 400;
-    }
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
 
-    #prayer-widget table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-    }
+		.prayer-time {
+			font-size: 4rem;
+			font-weight: bold;
+			margin: 0;
+			padding: 0;
+			color: #333;
+		}
 
-    #prayer-widget td {
-      padding: 10px 0;
-      font-size: 14px;
-      font-weight: 300;
-      text-transform: capitalize;
-      border-bottom: 1px solid #dcdcdc;
-    }
+		.next-prayer {
+			color: pink;
+		}
 
-    #prayer-widget td:first-child {
-      text-align: left;
-    }
-
-    #prayer-widget td:last-child {
-      text-align: right;
-    }
-
-    #prayer-widget td:last-child span {
-      font-weight: 400;
-    }
-
-    #prayer-widget td:last-child sup {
-      font-size: 12px;
-      vertical-align: super;
-    }
-
-    #prayer-widget .next-prayer {
-      color: pink;
-      font-weight: 400;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #2F3438;
-        color: #fff;
-      }
-    }
-
-    @media (prefers-color-scheme: light) {
-      body {
-        background-color: #fff;
-        color: #222;
-      }
-    }
-  </style>
+		.prayer-name {
+			font-size: 2rem;
+			margin: 0;
+			padding: 0;
+			color: #333;
+		}
+	</style>
 </head>
 <body>
-  <div id="prayer-widget">
-    <table>
-      <tr>
-        <td>Imsak</td>
-        <td id="imsak-time"></td>
-      </tr>
-      <tr>
-        <td>Fajr</td>
-        <td id="fajr-time"></td>
-      </tr>
-      <tr>
-        <td>Sunrise</td>
-        <td id="sunrise-time"></td>
-      </tr>
-      <tr>
-        <td>Dhuhr</td>
-        <td id="dhuhr-time"></td>
-      </tr>
-      <tr>
-        <td>Asr</td>
-        <td id="asr-time"></td>
-      </tr>
-      <tr>
-        <td>Sunset</td>
-        <td id="sunset-time"></td>
-      </tr>
-      <tr>
-        <td>Maghrib</td>
-        <td id="maghrib-time"></td>
-      </tr>
-      <tr>
-        <td>Isha</td>
-        <td id="isha-time"></td>
-      </tr>
-    </table>
-  </div>
+	<div class="container">
+		<h1 class="prayer-time"></h1>
+		<p class="prayer-name"></p>
+	</div>
 
-  <script>
-  const apiUrl = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=MD&country=USA&method=2';
+	<script src="https://api.aladhan.com/v1/timingsByCity?city=Baltimore&country=United%20States&method=2"></script>
+	<script>
+		const prayerTimeElement = document.querySelector('.prayer-time');
+		const prayerNameElement = document.querySelector('.prayer-name');
 
-function getPrayerTimes() {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-  const day = ('0' + currentDate.getDate()).slice(-2);
-  const url = `${apiUrl}&date=${day}-${month}-${year}`;
+		// Get current time
+		const now = new Date();
 
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data); // Log the data to check if it's in the expected format
-      
-      const prayerTimes = data.data.timings;
-      const widget = document.getElementById('prayer-widget');
-      const table = document.createElement('table');
+		// Parse prayer times from API response
+		const prayerTimes = JSON.parse(prayerTime).data.timings;
 
-      const excludedPrayers = ['Firstthird', 'Lastthird', 'Midnight', 'Sunrise'];
+		// Get prayer times for today
+		const formattedDate = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+		const todayPrayerTimes = prayerTimes[formattedDate];
 
-      Object.keys(prayerTimes).forEach(prayer => {
-        if (!excludedPrayers.includes(prayer)) {
-          const row = document.createElement('tr');
-          const prayerName = document.createElement('td');
-          const prayerTime = document.createElement('td');
-          prayerName.innerText = prayer;
-          prayerTime.innerHTML = `${prayerTimes[prayer]}`;
-          row.appendChild(prayerName);
-          row.appendChild(prayerTime);
-          table.appendChild(row);
-        }
-      });
+		// Find next prayer time
+		let nextPrayer = null;
+		for (let prayer in todayPrayerTimes) {
+			const prayerTime = new Date(`${formattedDate} ${todayPrayerTimes[prayer]}`);
+			if (prayerTime > now) {
+				nextPrayer = prayer;
+				break;
+			}
+		}
 
-      widget.innerHTML = '';
-      widget.appendChild(table);
-    })
-    .catch(error => console.error(error)); // Log any error messages related to the API request
-}
-
-getPrayerTimes();
-
-</script>
+		// Format and display next prayer time
+		if (nextPrayer) {
+			const nextPrayerTime = todayPrayerTimes[nextPrayer];
+			prayerTimeElement.textContent = nextPrayerTime;
+			prayerNameElement.textContent = nextPrayer;
+			prayerNameElement.classList.add('next-prayer');
+		} else {
+			prayerTimeElement.textContent = 'No prayer times remaining today.';
+		}
+	</script>
+</body>
+</html>
