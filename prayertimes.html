@@ -115,7 +115,7 @@ function getPrayerTimes() {
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
   const url = `${apiUrl}&date=${day}-${month}-${year}`;
-  
+
   fetch(url)
     .then(response => response.json())
     .then(data => {
