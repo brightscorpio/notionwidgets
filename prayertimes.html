@@ -11,46 +11,62 @@
 		th, td {
 			padding: 10px;
 		}
+		.current-prayer {
+			color: pink;
+		}
 	</style>
 	<script>
-	function displayPrayerTimes() {
-    var xhr = new XMLHttpRequest();
-    var method = 'GET';
-    var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
-    var async = true;
+	window.onload = function() {
+			displayPrayerTimes();
+			setInterval(displayPrayerTimes, 1000);
+		};
+		
+		function displayPrayerTimes() {
+			var xhr = new XMLHttpRequest();
+			var method = 'GET';
+			var url = 'https://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=8';
+			var async = true;
 
-    xhr.open(method, url, async);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var data = JSON.parse(xhr.responseText);
-            document.getElementById('imsak_today').innerHTML = data.data.timings.Imsak;
-            document.getElementById('fajr_today').innerHTML = data.data.timings.Fajr;
-            document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
-            document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
-            document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
-            document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
+			xhr.open(method, url, async);
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState === 4 && xhr.status === 200) {
+					var data = JSON.parse(xhr.responseText);
+					document.getElementById('imsak_today').innerHTML = data.data.timings.Imsak;
+					document.getElementById('fajr_today').innerHTML = data.data.timings.Fajr;
+					document.getElementById('dhuhr_today').innerHTML = data.data.timings.Dhuhr;
+					document.getElementById('asr_today').innerHTML = data.data.timings.Asr;
+					document.getElementById('maghrib_today').innerHTML = data.data.timings.Maghrib;
+					document.getElementById('isha_today').innerHTML = data.data.timings.Isha;
 
-            var now = new Date();
-            var nextPrayer;
-            if (now > new Date(data.data.timings.Fajr) && now < new Date(data.data.timings.Dhuhr)) {
-                nextPrayer = "Dhuhr";
-            } else if (now > new Date(data.data.timings.Dhuhr) && now < new Date(data.data.timings.Asr)) {
-                nextPrayer = "Asr";
-            } else if (now > new Date(data.data.timings.Asr) && now < new Date(data.data.timings.Maghrib)) {
-                nextPrayer = "Maghrib";
-            } else if (now > new Date(data.data.timings.Maghrib) && now < new Date(data.data.timings.Isha)) {
-                nextPrayer = "Isha";
-            } else if (now > new Date(data.data.timings.Isha) && now < new Date(data.data.next_day_date + ' ' + data.data.timings.Fajr)) {
-                nextPrayer = "Imsak";
-            } else {
-                nextPrayer = "Fajr";
-            }
-            document.getElementById(nextPrayer.toLowerCase() + '_today').style.color = 'pink';
-        }
-    };
-    xhr.send();
-}
+					var now = new Date();
+					var currentPrayer;
+					if(now > new Date(data.data.timings.Fajr) && now < new Date(data.data.timings.Dhuhr)) {
+						currentPrayer = "fajr_today";
+					} else if(now > new Date(data.data.timings.Dhuhr) && now < new Date(data.data.timings.Asr)) {
+						currentPrayer = "dhuhr_today";
+					} else if(now > new Date(data.data.timings.Asr) && now < new Date(data.data.timings.Maghrib)) {
+						currentPrayer = "asr_today";
+					} else if(now > new Date(data.data.timings.Maghrib) && now < new Date(data.data.timings.Isha)) {
+						currentPrayer = "maghrib_today";
+					} else {
+						currentPrayer = "isha_today";
+					}
 
+					// Reset all prayer times to default color
+					document.getElementById('imsak_today').classList.remove("current-prayer");
+					document.getElementById('fajr_today').classList.remove("current-prayer");
+					document.getElementById('dhuhr_today').classList.remove("current-prayer");
+					document.getElementById('asr_today').classList.remove("current-prayer");
+					document.getElementById('maghrib_today').classList.remove("current-prayer");
+					document.getElementById('isha_today').classList.remove("current-prayer");
+
+					// Set the color of the current prayer time to pink
+					document.getElementById(currentPrayer).classList.add("current-prayer");
+				}
+
+			};
+			xhr.send();
+		}
 	</script>
 </head>
 <body>
