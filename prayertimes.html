@@ -37,10 +37,12 @@
 			xhr.send();
 
 			function displayPrayerTimes(timings) {
+				document.getElementById('imsak').innerHTML = 'Imsak: ' + timings.Imsak;
 				document.getElementById('fajr').innerHTML = 'Fajr: ' + timings.Fajr;
 				document.getElementById('dhuhr').innerHTML = 'Dhuhr: ' + timings.Dhuhr;
 				document.getElementById('asr').innerHTML = 'Asr: ' + timings.Asr;
 				document.getElementById('maghrib').innerHTML = 'Maghrib: ' + timings.Maghrib;
+				document.getElementById('iftar').innerHTML = 'Imsak: ' + timings.Iftar;
 				document.getElementById('isha').innerHTML = 'Isha: ' + timings.Isha;
 			}
 		};
@@ -48,11 +50,12 @@
 </head>
 <body>
 	<h1>Prayer Times</h1>
-	<p id="imsak"><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/fasting.png" width="15"></p>
+	<p id="imsak"><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/fasting.png?raw=true" width="15"></p>
 	<p id="fajr"></p>
 	<p id="dhuhr"></p>
 	<p id="asr"></p>
 	<p id="maghrib"></p>
+	<p id="iftar"></p>
 	<p id="isha"></p>
 </body>
 </html>
