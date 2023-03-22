@@ -119,12 +119,14 @@ function getPrayerTimes() {
   fetch(url)
     .then(response => response.json())
     .then(data => {
+      console.log(data); // Log the data to check if it's in the expected format
+      
       const prayerTimes = data.data.timings;
       const widget = document.getElementById('prayer-widget');
       const table = document.createElement('table');
 
       const excludedPrayers = ['Firstthird', 'Lastthird', 'Midnight', 'Sunrise'];
-     
+
       Object.keys(prayerTimes).forEach(prayer => {
         if (!excludedPrayers.includes(prayer)) {
           const row = document.createElement('tr');
@@ -135,36 +137,13 @@ function getPrayerTimes() {
           row.appendChild(prayerName);
           row.appendChild(prayerTime);
           table.appendChild(row);
-          const prayerDateTime = new Date(`${year}-${month}-${day}T${prayerTimes[prayer]}Z`);
-    if (prayerDateTime > currentDate && !nextPrayer) {
-      prayerTime.classList.add('next-prayer');
-      nextPrayer = prayerTime;
-    }
         }
       });
 
       widget.innerHTML = '';
       widget.appendChild(table);
-
-      // Check for dark mode preference
-      const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      // Apply dark mode styles if preference is set to dark mode
-      if (prefersDarkMode) {
-        document.body.style.backgroundColor = '#333';
-        widget.style.color = '#fff';
-        widget.style.backgroundColor = '#444';
-        widget.style.borderColor = '#555';
-        const rows = document.querySelectorAll('#prayer-widget tr');
-        rows.forEach(row => {
-          row.style.borderColor = '#555';
-        });
-        const nextPrayer = document.querySelector('.next-prayer');
-        if (nextPrayer) {
-          nextPrayer.style.color = '#0f0';
-        }
-      }
-    });
+    })
+    .catch(error => console.error(error)); // Log any error messages related to the API request
 }
 
 getPrayerTimes();
