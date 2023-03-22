@@ -37,13 +37,13 @@
 
 					var now = new Date();
 					var nextPrayer;
-					if(now > new Date(data.data.timings.Fajr)) {
+					if(now > new Date(data.data.timings.Fajr) && now < new Date(data.data.timings.Dhuhr)) {
 						nextPrayer = "Dhuhr";
-					} else if(now > new Date(data.data.timings.Dhuhr)) {
+					} else if(now > new Date(data.data.timings.Dhuhr) && now < new Date(data.data.timings.Asr)) {
 						nextPrayer = "Asr";
-					} else if(now > new Date(data.data.timings.Asr)) {
+					} else if(now > new Date(data.data.timings.Asr) && now < new Date(data.data.timings.Maghrib)) {
 						nextPrayer = "Maghrib";
-					} else if(now > new Date(data.data.timings.Maghrib)) {
+					} else if(now > new Date(data.data.timings.Maghrib) && now < new Date(data.data.timings.Isha)) {
 						nextPrayer = "Isha";
 					} else {
 						nextPrayer = "Fajr";
