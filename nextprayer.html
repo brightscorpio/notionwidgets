@@ -13,6 +13,54 @@
 			border-radius: 5px;
 		}
 	</style>
+<script>
+		window.onload = function() {
+    		displayNextPrayerTime();
+    		setInterval(displayNextPrayerTime, 1000);
+		};
+
+		function displayNextPrayerTime() {
+			var xhr = new XMLHttpRequest();
+			var method = 'GET';
+			var url = 'http://api.aladhan.com/v1/timingsByCity?city=Essex&state=Maryland&country=USA&method=2';
+			var async = true;
+
+			xhr.open(method, url, async);
+			xhr.onreadystatechange = function() {
+    			if(xhr.readyState === 4 && xhr.status === 200) {
+        			var data = JSON.parse(xhr.responseText);
+        			var currentTime = new Date();
+        			currentTime.setSeconds(0);
+        			currentTime.setMilliseconds(0);
+        			var nextPrayerTime = null;
+        			var nextPrayerName = null;
+
+        			// Find next prayer time
+        			for (var prayerName in data.data.timings) {
+            			var prayerTime = new Date();
+            			var prayerTimeString = data.data.timings[prayerName];
+            			var prayerTimeParts = prayerTimeString.split(':');
+            			prayerTime.setHours(parseInt(prayerTimeParts[0]));
+            			prayerTime.setMinutes(parseInt(prayerTimeParts[1]));
+            			prayerTime.setSeconds(0);
+            			prayerTime.setMilliseconds(0);
+            			if (prayerTime > currentTime && (nextPrayerTime === null || prayerTime < nextPrayerTime)) {
+                			nextPrayerTime = prayerTime;
+                			nextPrayerName = prayerName;
+            			}
+        			}
+
+        			// Update display
+        			if (nextPrayerTime !== null && nextPrayerName !== null) {
+            			document.getElementById('next_prayer_name').innerHTML = nextPrayerName;
+            			document.getElementById('next_prayer_time').innerHTML = nextPrayerTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        			}
+    			}
+			};
+			xhr.send();
+		}
+	</script>
+</head>
 <body>
 	<table>
 		<tr>
@@ -24,54 +72,5 @@
 			<td id="next_prayer_time"></td>
 		</tr>
 	</table>
-
-	<script>
-		window.onload = function() {
-			displayNextPrayerTime();
-			setInterval(displayNextPrayerTime, 1000);
-		};
-
-		function displayNextPrayerTime() {
-			var xhr = new XMLHttpRequest();
-			var method = 'GET';
-			var url = 'https://api.pray.zone/v2/times/today.json?city=essex&state=maryland&country=US
-';
-			var async = true;
-
-			xhr.open(method, url, async);
-			xhr.onreadystatechange = function() {
-				if(xhr.readyState === 4 && xhr.status === 200) {
-					var data = JSON.parse(xhr.responseText);
-					var currentTime = new Date();
-					currentTime.setSeconds(0);
-					currentTime.setMilliseconds(0);
-					var nextPrayerTime = null;
-					var nextPrayerName = null;
-
-					// Find next prayer time
-					for (var i = 0; i < data.items[0].prayer_times.length; i++) {
-						var prayerTime = new Date();
-						var prayerTimeString = data.items[0].prayer_times[i];
-						var prayerTimeParts = prayerTimeString.split(':');
-						prayerTime.setHours(parseInt(prayerTimeParts[0]));
-						prayerTime.setMinutes(parseInt(prayerTimeParts[1]));
-						prayerTime.setSeconds(0);
-						prayerTime.setMilliseconds(0);
-						if (prayerTime > currentTime && (nextPrayerTime === null || prayerTime < nextPrayerTime)) {
-							nextPrayerTime = prayerTime;
-							nextPrayerName = data.prayer_names[i];
-						}
-					}
-
-					// Update display
-					if (nextPrayerTime !== null && nextPrayerName !== null) {
-						document.getElementById('next_prayer_name').innerHTML = nextPrayerName;
-						document.getElementById('next_prayer_time').innerHTML = nextPrayerTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-					}
-				}
-			};
-			xhr.send();
-		}
-	</script>
 </body>
 </html>
