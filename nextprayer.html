@@ -4,13 +4,38 @@
     <meta charset="UTF-8">
     <title>Islamic Prayer Time Widget</title>
     <style>
-        body {
+          body {
             font-family: 'Roboto Mono', monospace;
+            font-size: 20px;
             text-align: left;
         }
-        th, td {
+        
+        table {
+            border-spacing: 10px;
+            border-collapse: separate;
+        }
+        
+        th {
+            color: white;
+        }
+        
+        td {
             padding: 10px;
-            border-radius: 5px;
+            background-color: #FFC6D5;
+            border-radius: 20px;
+            color: #FF5E6C;
+        }
+        
+        td.prayer-name {
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        img {
+            float: left;
+            margin-top: 15px;
+            margin-right: 5px;
         }
     </style>
     <script>
@@ -62,15 +87,14 @@
     </script>
 </head>
 <body>
+    <img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/kabla.png?raw=true" width="55">
     <table>
         <tr>
             <th></th>
-            <th>Next Prayer</th>
-            <th>Time</th>
+            <th></th>
         </tr>
         <tr>
-            <td><img src="https://github.com/brightscorpio/notionwidgets/blob/main/pw_icons/praying.png?raw=true" width="35"></td>
-            <td id="next_prayer_name"></td>
+            <td class="prayer-name" id="next_prayer_name"></td>
             <td id="next_prayer_time"></td>
         </tr>
     </table>
